@@ -11,10 +11,10 @@
         var redirect_uri = [location.protocol, '//', location.host, location.pathname].join('')
         var url = 'https://login.microsoftonline.com/' + tenant_id +
         '/oauth2/authorize?client_id=' + client_id +
-        '&response_type=id_token+token' +
+        '&response_type=token' +
         '&response_mode=fragment' +
-        '&scope=' + encodeURI('openid') +
-        '&resource=' + encodeURI('https://graph.windows.net') +
+        // '&scope=' + encodeURI('openid') +
+        '&resource=' + encodeURI('https://jsainsbury.sharepoint.com/') +
         '&redirect_uri=' + encodeURI(redirect_uri) +
         '&nonce=beepboop'
 
