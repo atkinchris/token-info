@@ -4,21 +4,36 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-      var client_id = 'ec737a45-0489-4a31-98fe-bf9e4f676c09'
+      var client_id = '0b32863e-a785-47f8-b427-af23f12a5ab7'
       var tenant_id = 'e11fd634-26b5-47f4-8b8c-908e466e9bdf'
 
       function login() {
         var redirect_uri = [location.protocol, '//', location.host, location.pathname].join('')
         var url = 'https://login.microsoftonline.com/' + tenant_id +
-        '/oauth2/v2.0/authorize?client_id=' + client_id +
+        '/oauth2/authorize?client_id=' + client_id +
         '&response_type=id_token+token' +
         '&response_mode=fragment' +
-        '&scope=' + encodeURI('openid Files.Read') +
+        '&scope=' + encodeURI('openid') +
+        '&resource=' + encodeURI('https://graph.windows.net') +
         '&redirect_uri=' + encodeURI(redirect_uri) +
         '&nonce=beepboop'
 
         window.location = url
         return false
+      }
+
+      function parseResponse(res) {
+        return res.substring(1).split('&').reduce(function(obj, item) {
+          var key = item.split('=')[0]
+          var value = item.split('=')[1]
+
+          obj[key] = value
+          return obj
+        }, {})
+      }
+
+      function getContents(token) {
+        return JSON.parse(atob(token.split('.')[1]))
       }
     </script>
     <style>
@@ -33,13 +48,19 @@
         <input type="submit" value="Get Token" />
     </form>
     <script>
-      var hash = window.location.hash
-      var token = hash.substring(hash.indexOf("=")+1,hash.indexOf("&"))
-      var payload = token.split('.')[1]
-      var contents = JSON.parse(atob(payload))
+      var response = parseResponse(window.location.hash)
 
-      document.write('<pre>' + JSON.stringify(contents, null, 2) + '</pre>')
-      document.write('<pre>' + token + '</pre>')
+      if (response.id_token) {
+        document.write('<h2>ID Token</h2>')
+        document.write('<pre>' + JSON.stringify(getContents(response.id_token), null, 2) + '</pre>')
+        document.write('<pre>Bearer ' + response.id_token + '</pre>')
+      }
+
+      if (response.access_token) {
+        document.write('<h2>Access Token</h2>')
+        document.write('<pre>' + JSON.stringify(getContents(response.access_token), null, 2) + '</pre>')
+        document.write('<pre>Bearer ' + response.access_token + '</pre>')
+      }
     </script>
   </body>
 </html>
