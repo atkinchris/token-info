@@ -4,6 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Token Info</title>
+    <style>
+      pre {
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <form onsubmit="return login()">
+      <input type="submit" value="Get Token" />
+    </form>
     <script>
       var tenant_id = 'e11fd634-26b5-47f4-8b8c-908e466e9bdf'
       var client_id = '5ddbc9fe-20a9-4752-b421-91600c2fa071'
@@ -55,16 +66,5 @@
         writeTokenToDom('Access Token', response.access_token)
       }
     </script>
-    <style>
-      pre {
-        white-space: pre-wrap;
-        word-break: break-all;
-      }
-    </style>
-  </head>
-  <body>
-    <form onsubmit="return login()">
-      <input type="submit" value="Get Token" />
-    </form>
   </body>
 </html>
