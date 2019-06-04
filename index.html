@@ -43,6 +43,17 @@
         document.write('<pre>Bearer ' + token + '</pre>')
         document.write('<pre>' + JSON.stringify({ Authorization: 'Bearer ' + token }, null, 2) + '</pre>')
       }
+
+      var response = parseResponse(window.location.hash)
+      window.location.hash = ''
+
+      if (response.id_token) {
+        writeTokenToDom('ID Token', response.id_token)
+      }
+
+      if (response.access_token) {
+        writeTokenToDom('Access Token', response.access_token)
+      }
     </script>
     <style>
       pre {
@@ -53,18 +64,7 @@
   </head>
   <body>
     <form onsubmit="return login()">
-        <input type="submit" value="Get Token" />
+      <input type="submit" value="Get Token" />
     </form>
-    <script>
-      var response = parseResponse(window.location.hash)
-
-      if (response.id_token) {
-        writeTokenToDom('ID Token', response.id_token)
-      }
-
-      if (response.access_token) {
-        writeTokenToDom('Access Token', response.access_token)
-      }
-    </script>
   </body>
 </html>
