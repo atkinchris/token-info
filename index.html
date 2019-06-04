@@ -55,14 +55,14 @@
         document.write('<h2>ID Token</h2>')
         document.write('<pre>' + JSON.stringify(getContents(response.id_token), null, 2) + '</pre>')
         document.write('<pre>Bearer ' + response.id_token + '</pre>')
-        document.write('<pre>' + JSON.stringify({ Authorization: 'Bearer' + response.id_token }, null, 2) + '</pre>')
+        document.write('<pre>' + JSON.stringify({ Authorization: 'Bearer ' + response.id_token }, null, 2) + '</pre>')
       }
 
       if (response.access_token) {
         document.write('<h2>Access Token</h2>')
         document.write('<pre>' + JSON.stringify(getContents(response.access_token), null, 2) + '</pre>')
         document.write('<pre>Bearer ' + response.access_token + '</pre>')
-        document.write('<pre>' + JSON.stringify({ Authorization: 'Bearer' + response.access_token }, null, 2) + '</pre>')
+        document.write('<pre>' + JSON.stringify({ Authorization: 'Bearer ' + response.access_token }, null, 2) + '</pre>')
       }
     </script>
   </body>
