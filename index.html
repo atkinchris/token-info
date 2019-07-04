@@ -18,13 +18,12 @@
     <script>
       var tenant_id = 'e11fd634-26b5-47f4-8b8c-908e466e9bdf'
       var client_id = '5ddbc9fe-20a9-4752-b421-91600c2fa071'
+      var redirect_uri = [location.protocol, '//', location.host, location.pathname].join('')
 
       function login() {
-        var redirect_uri = [location.protocol, '//', location.host, location.pathname].join('')
-
         var url = 'https://login.microsoftonline.com/' + tenant_id +
         '/oauth2/v2.0/authorize?client_id=' + client_id +
-        '&response_type=id_token' +
+        '&response_type=code' +
         '&response_mode=fragment' +
         '&scope=' + encodeURI('openid email profile') +
         '&redirect_uri=' + encodeURI(redirect_uri) +
@@ -55,8 +54,31 @@
         document.write('<pre>' + JSON.stringify({ Authorization: 'Bearer ' + token }, null, 2) + '</pre>')
       }
 
+      function exchangeCodeForToken(code) {
+        var url = 'https://login.microsoftonline.com/' + tenant_id + '/oauth2/v2.0/token'
+        var body = [
+          'grant_type=authorization_code',
+          'client_id=' + client_id,
+          'code=' + code,
+          'scope=' + encodeURI('openid email profile') +
+          'redirect_uri=' + encodeURI(redirect_uri)
+        ].join('&')
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: body,
+        }).then(console.log).catch(console.error)
+      }
+
       var response = parseResponse(window.location.hash)
       window.location.hash = ''
+
+      if (response.code) {
+        exchangeCodeForToken(response.code)
+      }
 
       if (response.id_token) {
         writeTokenToDom('ID Token', response.id_token)
